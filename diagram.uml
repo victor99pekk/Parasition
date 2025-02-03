@@ -1,0 +1,15 @@
+@startuml
+class User {
+  +name: String
+  +email: String
+  +login()
+}
+
+class Order {
+  +orderId: int
+  +date: Date
+  +placeOrder()
+}
+
+User --> Order : places
+@enduml
