@@ -15,6 +15,9 @@
 
 Music Finder combines music discovery with social media trends to keep you ahead of the curve. Whether you’re a content creator or just love discovering new music, this tool helps you stay connected to the latest viral trends!
 
+## Technical Documentation
+![Alt text](files/uml.png)
+
 
 ## LastfmAPI class to retreive track information
 
