@@ -1,51 +1,26 @@
-import requests
-import base64
-from config import CLIENT_ID, CLIENT_SECRET  # Import credentials
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+from config import *
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=CLIENT_ID,
+                                                           client_secret=CLIENT_SECRET))
 
-# Function to get the access token
-def get_access_token():
-    url = "https://accounts.spotify.com/api/token"
+def get_similar_songs(track_name, artist_name):
+    # Search for the track
+    results = sp.search(q=f"track:{track_name} artist:{artist_name}", type="track", limit=1)
+    if not results['tracks']['items']:
+        return "Song not found."
     
-    # Encode credentials
-    auth_header = base64.b64encode(f"{CLIENT_ID}:{CLIENT_SECRET}".encode()).decode()
+    track_id = results['tracks']['items'][0]['id']
     
-    headers = {
-        "Authorization": f"Basic {auth_header}",
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
-    data = {"grant_type": "client_credentials"}
+    # Get recommendations based on the track
+    recommendations = sp.recommendations(seed_tracks=[track_id], limit=5)
+    
+    # Extract song names and artists
+    similar_songs = [(track['name'], track['artists'][0]['name']) for track in recommendations['tracks']]
+    
+    return similar_songs
 
-    # Make request to get access token
-    response = requests.post(url, headers=headers, data=data)
-    response.raise_for_status()  # Raise an error if request fails
-
-    return response.json().get("access_token")
-
-# Get the access token
-access_token = get_access_token()
-
-# Define the API endpoint
-url = "https://api.spotify.com/v1/recommendations"
-
-# Define the parameters
-params = {
-    "seed_tracks": "0lYBSQXN6rCTvUZvg9S0lU",  # Replace with your track ID
-    #"limit": 1,  # Number of recommendations
-    #"market": "GB"  # Change if needed
-}
-
-# Set the headers with the correct Bearer token
-headers = {
-    "Authorization": f"Bearer {access_token}"
-}
-
-# Make the API request
-response = requests.get(url, headers=headers, params=params)
-
-# Check if request was successful
-if response.status_code == 200:
-    recommendations = response.json()
-    for track in recommendations["tracks"]:
-        print(f"{track['name']} by {', '.join(artist['name'] for artist in track['artists'])}")
-else:
-    print("Error:", response.status_code, response.text)
+# Example usage
+similar_songs = get_similar_songs("Blinding Lights", "The Weeknd")
+for song, artist in similar_songs:
+    print(f"{song} by {artist}")
