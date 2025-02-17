@@ -1,5 +1,5 @@
 import os
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "Keys", "GoogleKey.json")
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "GoogleKey.json")
 from google.cloud import videointelligence
 
 class GoogleVideoAnalyzer:
