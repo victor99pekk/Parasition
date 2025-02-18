@@ -7,7 +7,7 @@ class LastfmAPI:
         self.API_SECRET = API_SECRET
         self.network = pylast.LastFMNetwork(api_key=API_KEY, api_secret=API_SECRET)
 
-    def get_similar_tracks(self, song, artist, limit=5):
+    def get_similar_tracks(self, song, artist, limit=5) -> tuple[str, str]:
         """Returns similar tracks based on Last.fm recommendations."""
         track = self.network.get_track(artist, song)
         similar_tracks = track.get_similar(limit=limit)

@@ -1,4 +1,3 @@
-
 #spotify
 CLIENT_ID = "5140ff5873f94fbc8093c66960b3ec8c"
 CLIENT_SECRET = "7848e32fe1c04d24bf12821b6da3d4af"
